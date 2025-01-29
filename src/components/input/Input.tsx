@@ -1,12 +1,24 @@
+interface InputProps {
+    data: { [key: string]: string }
+    values: { [key: string]: string }
+    errors: { [key: string]: { [key: string]: boolean | string } }
+    onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void
+    onBlur?: (event: React.FocusEvent<HTMLInputElement>) => void
+}
 
-
-
-function Input({ data, onChange }: any) {
+function Input({ data, values, errors, onChange, onBlur }: InputProps) {
 
     return (
-        <div className={"input" + data.type}>
-            <h3>{data}</h3>
-            <input {...data} onChange={onChange} />
+        <div className={"input-box"}>
+            <h3 className="input-box__title">{data.name}</h3>
+            <input
+                className="input-box__field"
+                value={values[data.name]}
+                onChange={onChange}
+                onBlur={onBlur}
+                type={data.type || ""}
+            />
+            {errors[data.name] && !errors[data.name].isValid && <span className="input-box__message">{errors[data.name].message}</span>}
         </div>
     );
 }

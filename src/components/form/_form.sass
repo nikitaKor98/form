@@ -3,13 +3,18 @@
 .form
     position: relative
     display: flex
-    width: 100%
+    height: 100vh
     justify-content: center
+    align-items: center
     &__box
-        display: inline
+        display: flex
+        flex-direction: column
+        align-items: center
+        vertical-align: middle
+        padding: 2.5rem
         width: 60%
-        background: $color-light-white
+        background: $color-dark-white
         border: .2rem solid $color-dark-blue
         border-radius: 1.5rem
     &__btn
-        background: $color-dark-white
+        background: $color-light-white

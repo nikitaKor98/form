@@ -1,0 +1,11 @@
+name: Setup Node.js environment
+on: [pull_request]
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/setup-node@v4.2.0
+        with:
+          node-version: 18
+      - run: npm ci
+      - run: npm test

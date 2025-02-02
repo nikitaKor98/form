@@ -28,7 +28,7 @@ const data: any = {
     user_name: {
       type: "input",
       validation: {
-        required: true
+        required: { isRequired: true }
       }
     },
     gender: {
@@ -45,7 +45,7 @@ const data: any = {
         }
       ],
       validation: {
-        required: false
+        required: { isRequired: false }
       }
     }
   },

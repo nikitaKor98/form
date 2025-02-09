@@ -1,5 +1,9 @@
+import { InputField } from "../../types";
+
+type InputData = { name: string } & InputField;
+
 interface InputProps {
-    data: { [key: string]: string }
+    data: InputData
     values: { [key: string]: string }
     errors: { [key: string]: { [key: string]: boolean | string } }
     onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void

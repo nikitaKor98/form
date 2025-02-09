@@ -1,10 +1,12 @@
 import { useCallback, useState } from "react";
 import { validateFieldValue } from "../utils/validation";
 
-export const fnInitialState = (data: any): { [key: string]: { [key: string]: boolean | string } } => {
+import { Fields, FieldsTypes, RadioField } from "../types";
+
+export const fnInitialState = (data: { [key: string]: Fields }): { [key: string]: { [key: string]: boolean | string } } => {
     return Object.keys(data).reduce((acc, field) => {
 
-        const initValue = data[field].options && data[field].options.find((item: { [key: string]: boolean }) => item.default === true);
+        const initValue = data[field].type === FieldsTypes.Radio && (data[field] as RadioField).options.find((item) => item.default === true);
 
         return {
             ...acc,
@@ -16,11 +18,11 @@ export const fnInitialState = (data: any): { [key: string]: { [key: string]: boo
     }, {});
 }
 
-export const useValidation = (fields: any, steps: string[]) => {
+export const useValidation = (fields: { [key: string]: Fields }, steps: string[]) => {
 
     const [errors, setErrors] = useState(fnInitialState(fields));
 
-    const validateField = useCallback((value: string, name: string) => {
+    const validateField = useCallback((value: string, name: string): void => {
         const validationResult = validateFieldValue(fields, name, value);
 
         setErrors({

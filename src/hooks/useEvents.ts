@@ -1,6 +1,6 @@
+import { Fields } from "../types";
 
-
-export const useEvents = (fields: any, values: any, setValues: any, validateField: any): {
+export const useEvents = (fields: { [key: string]: Fields }, values: any, setValues: any, validateField: (value: string, name: string) => void): {
     [key: string]: {
         [key: string]: (e?: React.ChangeEvent<HTMLInputElement> | React.FocusEvent<HTMLInputElement>, key?: string) => void
     }

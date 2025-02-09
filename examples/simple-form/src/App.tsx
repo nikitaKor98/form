@@ -1,11 +1,12 @@
-import Form from "./components/form/Form";
+// import Form from "./components/form/Form";
 
-import "./style/main.sass";
+import Form, {Config, FieldsTypes} from "form";
 
-const data: any = {
+
+const data: Config = {
   fields: {
     password: {
-      type: "input",
+      type: FieldsTypes.Input,
       validateOn: "change",
       validation: {
         length: {
@@ -15,7 +16,7 @@ const data: any = {
       }
     },
     email: {
-      type: "input",
+      type: FieldsTypes.Input,
       validateOn: "blur",
       validation: {
         regExp: { reg: /^[^\s@]+@[^\s@]+\.[^\s@]+$/ }
@@ -23,16 +24,16 @@ const data: any = {
 
     },
     date_of_birth: {
-      type: "Date"
+      type: FieldsTypes.Date
     },
     user_name: {
-      type: "input",
+      type: FieldsTypes.Input,
       validation: {
         required: { isRequired: true }
       }
     },
     gender: {
-      type: "radio",
+      type: FieldsTypes.Radio,
       options: [
         {
           value: "f",
@@ -54,9 +55,7 @@ const data: any = {
 
 function App() {
   return (
-    <div>
-      <Form config={data} />
-    </div>
+    <Form config={data} />
   );
 }
 

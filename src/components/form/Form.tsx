@@ -1,23 +1,27 @@
 import { useState } from "react";
 
-import { useValidation } from "../hooks/useValidation";
-import { useEvents } from "../hooks/useEvents";
+import { useValidation } from "../../hooks/useValidation";
+import { useEvents } from "../../hooks/useEvents";
 
 import Input from "../input/Input";
 import Radio from "../radio/Radio";
 import Button from "../button/Button";
 
+import { Config, FieldsTypes, RadioField } from "../../types";
 
-function Form(props: any) {
+type FormProps = {
+    config: Config
+}
 
-    const { fields, steps } = props.config;
+function Form({ config: { fields, steps } }: FormProps) {
+
     const [page, setPage] = useState(0);
 
     const { errors, validateField, validateAllFields } = useValidation(fields, steps[page]);
 
     const [values, setValues] = useState(Object.keys(fields).reduce((acc, field) => {
 
-        const initValue = fields[field].options && fields[field].options.find((item: { [key: string]: boolean }) => item.default === true);
+        const initValue = fields[field].type === FieldsTypes.Radio && (fields[field] as RadioField).options.find((item) => item.default === true);
 
         return {
             ...acc,

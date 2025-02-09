@@ -1,7 +1,9 @@
+import { RadioField } from "../../types";
 
+type RadioData = { name: string } & RadioField;
 
 function Radio({ data, values, errors, onChange }: {
-    data: { [key: string]: any }
+    data: RadioData
     values: { [key: string]: string }
     errors: { [key: string]: { [key: string]: boolean | string } }
     onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void
@@ -12,7 +14,7 @@ function Radio({ data, values, errors, onChange }: {
         <div className="radio-box">
             <h3 className="radio-box__title">{data.name}</h3>
             <div className="radio-group">
-                {data.options.map((item: { [key: string]: string }) => {
+                {data.options.map((item) => {
                     return (
                         <div key={item.value} className="radio-group__item">
                             <input

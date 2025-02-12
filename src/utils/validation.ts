@@ -29,7 +29,6 @@ export const validateFieldValue = (fields: any, fieldName: string, value: string
     const { validation: validationRules } = fields[fieldName] || {};
 
     const errorMessage = validationRules && getFirstErrorMessage(validationRules, value);
-
     if (!errorMessage) return {
         isValid: true,
         message: ""

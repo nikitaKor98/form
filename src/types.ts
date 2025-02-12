@@ -58,4 +58,5 @@ export interface Config {
         [key: string]: Fields
     }
     steps: string[][]
+    validateOnNext: boolean
 }

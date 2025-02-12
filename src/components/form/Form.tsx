@@ -11,13 +11,14 @@ import { Config, FieldsTypes, RadioField } from "../../types";
 
 type FormProps = {
     config: Config
+    onSubmit: (data?: any, setErrors?: any) => Promise<any>
 }
 
-function Form({ config: { fields, steps } }: FormProps) {
+function Form({ config: { fields, steps, validateOnNext }, onSubmit }: FormProps) {
 
     const [page, setPage] = useState(0);
 
-    const { errors, validateField, validateAllFields } = useValidation(fields, steps[page]);
+    const { errors, setErrors, validateField, validateAllFields } = useValidation(fields, steps[page]);
 
     const [values, setValues] = useState(Object.keys(fields).reduce((acc, field) => {
 
@@ -36,12 +37,26 @@ function Form({ config: { fields, steps } }: FormProps) {
     }
 
     const handleNext = () => {
-        if (!validateAllFields()) return;
+        if (validateOnNext && !validateAllFields(values)) return;
+        else if (!validateAllFields()) return;
+
         setPage(prev => prev + 1);
     }
 
     const handleSubmit = () => {
-        validateAllFields() && console.log(values);
+
+        if (validateAllFields(values)) {
+
+            onSubmit(values).then(err => Object.entries(err).reduce((acc, [field, message]) => {
+                return {
+                    ...acc,
+                    [field]: { isValid: false, message }
+                }
+            }, {} as any)).then(newErr => {
+                setErrors({ ...errors, ...newErr });
+                setPage(steps.findIndex(step => step.find((stepName) => newErr[stepName].isValid === false)));
+            });
+        }
     }
 
     return (

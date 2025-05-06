@@ -11,7 +11,6 @@ interface InputProps {
 }
 
 function Input({ data, values, errors, onChange, onBlur }: InputProps) {
-
     return (
         <div className={"input-box"}>
             <h3 className="input-box__title">{data.name}</h3>

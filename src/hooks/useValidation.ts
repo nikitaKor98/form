@@ -31,9 +31,23 @@ export const useValidation = (fields: { [key: string]: Fields }, steps: string[]
         });
     }, [fields, setErrors, errors]);
 
-    const validateAllFields = useCallback((): boolean => {
+    const validateAllFields = useCallback((values?: { [value: string]: any }): boolean => {
+
+        let newError: any = {}
+
+        if (values) {
+            steps.forEach(step => {
+                newError = {
+                    ...newError,
+                    [step]: validateFieldValue(fields, step, values[step])
+                }
+            });
+            setErrors({ ...errors, ...newError });
+            return steps.every((step) => newError[step].isValid === true);
+        };
+
         return steps.every((step) => errors[step].isValid === true);
     }, [steps, errors]);
 
-    return { errors, validateField, validateAllFields }
+    return { errors, setErrors, validateField, validateAllFields }
 }

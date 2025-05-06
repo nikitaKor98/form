@@ -1,7 +1,6 @@
-// import Form from "./components/form/Form";
+import Form, { Config, FieldsTypes } from "form";
 
-import Form, {Config, FieldsTypes} from "form";
-
+import "./style/main.sass";
 
 const data: Config = {
   fields: {
@@ -19,6 +18,7 @@ const data: Config = {
       type: FieldsTypes.Input,
       validateOn: "blur",
       validation: {
+        required: { isRequired: true },
         regExp: { reg: /^[^\s@]+@[^\s@]+\.[^\s@]+$/ }
       }
 
@@ -50,12 +50,37 @@ const data: Config = {
       }
     }
   },
-  steps: [["email", "password", "gender"], ["user_name", "date_of_birth"]]
+  steps: [["email", "password", "gender"], ["user_name", "date_of_birth"]],
+  validateOnNext: true
+}
+
+function apiRequest(...args: any[]) {
+  return new Promise((res, rej) => {
+    setTimeout(() => rej({
+      email: "email already exists",
+      user_name: "user_name already exists",
+    }), 1000);
+  })
+}
+
+function handleFormSubmit(formData: any) {
+  return apiRequest(formData).then(() => {
+    console.log("success registration");
+  }).catch(err => err);
+
+  // => {
+  //   Object.entries(err).forEach(([field, message]) => {
+  //     setFieldError(field, message);
+  //   })
+  // }
 }
 
 function App() {
   return (
-    <Form config={data} />
+    <Form
+      config={data}
+      onSubmit={handleFormSubmit}
+    />
   );
 }
 

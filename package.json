@@ -1,13 +1,32 @@
 {
-  "name": "form",
+  "name": "@korytnikov_n/react-config-form",
   "version": "0.1.0",
-  "private": true,
+  "description": "Configurable multi-step form library for React",
   "main": "dist/cjs/index.js",
   "module": "dist/esm/index.js",
   "types": "dist/types.d.ts",
   "files": [
-    "dist"
+    "dist",
+    "README.md"
   ],
+  "keywords": [
+    "react",
+    "form",
+    "typescript",
+    "validation",
+    "multi-step-form",
+    "config-form"
+  ],
+  "author": "nikitaKor98",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nikitaKor98/form.git"
+  },
+  "bugs": {
+    "url": "https://github.com/nikitaKor98/form/issues"
+  },
+  "homepage": "https://github.com/nikitaKor98/form#readme",
   "peerDependencies": {
     "react": "^18.3.1"
   },

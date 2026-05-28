@@ -1,46 +1,273 @@
-# Getting Started with Create React App
+# React Config Form
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+A lightweight configurable form component for React applications.
 
-## Available Scripts
+This project is a small form library built with **React** and **TypeScript**.
+It allows developers to describe form fields, validation rules, and multi-step form flow using a single configuration object.
 
-In the project directory, you can run:
+## ✨ Features
 
-### `npm start`
+- Config-based form rendering
+- Multi-step form support
+- Input and radio field support
+- Client-side validation
+- Validation on `change` or `blur`
+- Validation before moving to the next step
+- Server-side error handling after submit
+- TypeScript types included
+- Rollup build with CommonJS, ES Modules, and type declarations
+- Unit tests for validation logic
+- Simple example app included
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+## 🛠 Tech Stack
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+- React
+- TypeScript
+- Rollup
+- Jest
+- React Testing Library
+- GitHub Actions
 
-### `npm test`
+## 📦 Installation
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+```bash
+npm install
+```
 
-### `npm run build`
+## 🚀 Build
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+```bash
+npm run build
+```
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+The library is built into the `dist` folder and includes:
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+- CommonJS build
+- ES Module build
+- TypeScript declaration file
 
-### `npm run eject`
+## 🧪 Tests
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+```bash
+npm test
+```
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+## 🧩 Basic Usage
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+```tsx
+import Form, { Config, FieldsTypes } from "form";
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+const config: Config = {
+  fields: {
+    email: {
+      type: FieldsTypes.Input,
+      validateOn: "blur",
+      validation: {
+        required: { isRequired: true },
+        regExp: {
+          reg: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+        },
+      },
+    },
 
-## Learn More
+    password: {
+      type: FieldsTypes.Input,
+      validateOn: "change",
+      validation: {
+        length: {
+          min: 8,
+          max: 12,
+        },
+      },
+    },
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+    gender: {
+      type: FieldsTypes.Radio,
+      options: [
+        { value: "f", name: "Female" },
+        { value: "m", name: "Male", default: true },
+      ],
+    },
+  },
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+  steps: [["email", "password"], ["gender"]],
+  validateOnNext: true,
+};
+
+function handleSubmit(data: unknown) {
+  console.log(data);
+  return Promise.resolve({});
+}
+
+export default function App() {
+  return <Form config={config} onSubmit={handleSubmit} />;
+}
+```
+
+## ⚙️ Configuration
+
+The form is controlled by a `config` object.
+
+```ts
+type Config = {
+  fields: {
+    [key: string]: FieldConfig;
+  };
+  steps: string[][];
+  validateOnNext: boolean;
+};
+```
+
+### `fields`
+
+Describes all form fields.
+
+Supported field types:
+
+```ts
+FieldsTypes.Input;
+FieldsTypes.Radio;
+FieldsTypes.Date;
+```
+
+Example:
+
+```ts
+fields: {
+  email: {
+    type: FieldsTypes.Input,
+    validateOn: "blur",
+    validation: {
+      required: { isRequired: true },
+    },
+  },
+}
+```
+
+### `steps`
+
+Defines which fields are displayed on each form step.
+
+```ts
+steps: [
+  ["email", "password"],
+  ["user_name", "date_of_birth"],
+];
+```
+
+### `validateOnNext`
+
+If `true`, the form validates current step fields before moving to the next step.
+
+```ts
+validateOnNext: true;
+```
+
+## ✅ Validation Rules
+
+The library currently supports:
+
+### Required
+
+```ts
+required: {
+  isRequired: true;
+}
+```
+
+### Length
+
+```ts
+length: {
+  min: 8,
+  max: 12,
+}
+```
+
+### Regular Expression
+
+```ts
+regExp: {
+  reg: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+}
+```
+
+## 🔁 Multi-step Flow
+
+The form automatically renders fields for the current step and provides navigation:
+
+- `Next` button
+- `Back` button
+- `Submit` button on the final step
+
+Before moving forward, the current step can be validated depending on the `validateOnNext` option.
+
+## 🌐 Server-side Errors
+
+The `onSubmit` handler can return field errors from an API.
+
+Example:
+
+```ts
+function handleSubmit(formData: unknown) {
+  return apiRequest(formData).catch((errors) => errors);
+}
+```
+
+Example server error format:
+
+```ts
+{
+  email: "Email already exists",
+  user_name: "Username already exists"
+}
+```
+
+The form maps these errors back to the corresponding fields and shows the user the correct step.
+
+## 📁 Project Structure
+
+```txt
+src/
+  components/
+    button/
+    form/
+    input/
+    radio/
+  hooks/
+    useEvents.ts
+    useValidation.ts
+  utils/
+    validation.ts
+    validation.test.ts
+  index.ts
+  types.ts
+
+examples/
+  simple-form/
+```
+
+## 📌 What I Practiced in This Project
+
+This project helped me practice:
+
+- Building reusable React components
+- Designing a config-driven API
+- Working with TypeScript types
+- Creating custom React hooks
+- Implementing validation logic
+- Handling multi-step form state
+- Processing async submit errors
+- Building a library with Rollup
+- Writing unit tests
+- Setting up GitHub Actions
+
+## 🔮 Possible Improvements
+
+- Add textarea, select, checkbox, and custom field components
+- Add custom validation messages from config
+- Improve accessibility for labels and error messages
+- Add better styling customization
+- Add more tests for hooks and form behavior
+- Publish the package to npm
+- Add Storybook documentation
